@@ -1,0 +1,303 @@
+<!-- buat market
+    ada table product
+    name, price, category, stock
+
+    bisa add, delete, add to cart
+
+    table cart
+    name, price, category, qty
+
+    bisa delete
+    ada total harga dari semua yang ada di cart
+
+    saat masuk ke cart prompt brp banyak stock yg mau dimasukan ke cart
+    stock di table product dikurang dengan product yg dimasukan ke cart
+    apa bila cart didelete maka stock + dengan qty cart
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>table market dan cart</title>
+    <style>
+    table, th, tr, td {
+        border :1px solid black;
+        text-align: center;
+        padding: 10px;
+    }
+</style>
+
+</head>
+<body>
+<table id="tableProd">
+    <p><h1>Table Produk</h1></p>
+<thead>
+<tr>
+    <th>number</th>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Category</th>
+    <th>Stock</th>
+    <th colspan = "2">Action</th>
+</tr>
+</thead>
+<tbody>
+    <tr>
+        <td> <!-- table data--></td>
+        <td> </td>
+            <td> </td>
+                <td> </td>
+                    <td></td>
+                   
+                        <td>
+                            <button onclick="DeleteDataP()"> Delete</button>
+                        </td>
+                        <td>
+                            <button onclick="AddDataCart()"> addtoCart</button>
+                        </td>
+                        </tr>
+        
+</tbody>
+<tfoot>
+    <tr> 
+        <td>
+            <!-- td kosong ini buat number-->
+        </td>
+        <td>
+            <input type="text" id="tbName" placeholder="name">
+        </td>
+        <td>
+            <input type="number" id="tbPrice" placeholder="price">
+        </td>
+        <td>
+            <input type="text" id="tbCat" placeholder="category">
+        </td>
+        <td><input type="number" id="tbStock" placeholder="stock"></td>
+        <td colspan ="2">
+            <button onclick="AddData()"> Add</button>
+        </td>              
+        </tr>
+</tfoot>
+</table>
+
+
+
+<br><br>
+<table id="tableCart">
+    <p><h1>Table Cart</h1></p>
+<thead>
+<tr>
+    <th>Number</th>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Category</th>
+    <th>Qty</th>
+    <th>Action</th>
+</tr>
+
+<tbody>
+    <tr>
+        <td> <!-- table data-->
+        
+        </td>
+        <td> 
+            </td>
+            <td> 
+                </td>
+                <td> 
+                    </td><td></td>
+                        <td>
+                            <button onclick="DeleteDataC()"> Delete</button>
+                        </td>
+                        </tr>
+        
+
+</tbody>
+</table>
+<br>
+    <p><h3>Total Harga: Rp.0 </h3></p>
+                        <br><br>
+
+<script>
+function AddData(){
+    let name = document.getElementById('tbName').value
+    let price = document.getElementById('tbPrice').value
+    let category = document.getElementById('tbCat').value
+    let stock = document.getElementById('tbStock').value
+
+    let buah = new Buah(name,price,category,stock)
+    databuah.push(buah)
+    renderdataP()
+ //   renderdataC()
+}
+
+class Buah {
+    constructor(name,price,category,stock){
+    this.name = name
+    this.price = price
+    this.category = category
+    this.stock = stock
+}
+}
+
+const databuah=[
+    new Buah ("anjing", 10000, "Fruits", 10)
+]
+
+class Cart {
+    constructor(name, price, category, qty, idxproduct){
+        this.name = name
+        this.price = price
+        this.category = category
+        this.qty = qty
+        this.idxproduct = idxproduct
+    }
+}
+//buat tabel keranjang di prompt
+const dataCart=[] 
+
+function renderdataP(){
+    let htmlresult= ''
+
+    databuah.forEach((item,idx) =>
+    (
+        htmlresult += `
+        <tr>
+<td> 
+${idx+1}
+</td>
+<td> 
+    ${item.name}
+    </td>
+    <td> 
+        ${item.price}
+        </td>
+        <td> 
+            ${item.category}
+            </td>
+            <td> 
+                ${item.stock}    
+                </td>
+                <td>
+                            <button onclick="DeleteDataP(${idx})"> Delete</button>
+                        </td>
+                        <td>
+                            <button onclick="AddDataCart(${idx})"> addtoCart</button>
+                        </td>
+                        </tr>`
+    ))
+            document.getElementsByTagName('tbody')[0].innerHTML = htmlresult
+}
+
+function renderdataC(editidx){
+    let htmlresult =""
+    dataCart.forEach((item, idx)=>{
+        if (editidx == idx){
+    htmlresult += `
+<tr>
+<td>${idx+1}</td>
+<td>${item.name}</td>
+<td>Rp.${parseInt(item.price).toLocaleString()}</td>
+<td>${item.category}</td>
+<td><input type="number" id="editQty" value="${item.qty}" /></td>
+<td><button onclick="renderdataC()"> Delete</button>
+<button onclick="editdiCart(${idx})">save</button></td>
+</tr>
+    `}
+    else{
+        htmlresult+=`
+<tr>
+<td>${idx+1}</td>
+<td>${item.name}</td>
+<td>Rp.${parseInt(item.price).toLocaleString()}</td>
+<td>${item.category}</td>
+<td>${item.qty}</td>
+<td><button onclick="DeleteDataC(${idx})"> Delete</button>
+<button onclick="renderdataC(${idx})">Edit</button></td>
+</tr>`
+    }
+}
+)
+document.getElementsByTagName('tbody')[1].innerHTML = htmlresult
+}
+
+function AddDataCart(idx){
+    let qty = prompt(`Berapa banyak buah ${databuah[idx].name} yang ingin dibeli?`)
+    let {name, price,category} = databuah[idx]
+    let idxproduct = idx
+    let item = new Cart(name,price,category,qty,idxproduct)
+    let temp = dataCart.map(function(i){return i.name})
+    if ((databuah[idx].stock - qty) >=0){
+        databuah[idx].stock = databuah[idx].stock - qty;
+        if(!temp.includes(name)){
+            dataCart.push(item)
+        } else {
+            dataCart[temp.indexOf(name)].qty = parseInt(dataCart[temp.indexOf(name)].qty) + parseInt(qty)
+        }
+
+        
+    } else {
+        alert(`Maaf stock ${databuah[idx].name} sudah habis`)
+    }
+renderdataC()
+renderdataP()
+bayar()}
+
+
+function bayar(){  
+if(dataCart.length < 1){        
+document.getElementsByTagName('h3')[0].innerHTML = `Total harga = Rp.0`
+} else {
+let pembayaran=0
+dataCart.forEach((item)=>{
+pembayaran += item.price * item.qty
+document.getElementsByTagName('h3')[0].innerHTML = `Total harga = Rp.${parseInt(pembayaran).toLocaleString()}`
+})
+    }}
+
+// var result = number1/number2 
+//         var kuda = document.getElementsByTagName('h2')
+//         kuda[0].innerHTML = "hasil:" + result  
+
+
+function editdiCart(idxeditcart){
+
+    let Qtysekarang = parseInt(dataCart[idxeditcart].qty)
+    let Qtybaru = parseInt(document.getElementById("editQty").value)
+    if (Qtybaru <= (Qtysekarang + parseInt(databuah[dataCart[idxeditcart].idxproduct].stock))){
+        if (Qtysekarang > Qtybaru){
+            dataCart[idxeditcart].qty = Qtybaru
+            databuah[dataCart[idxeditcart].idxproduct].stock = parseInt(dataCart[dataCart[idxeditcart].idxproduct].stock) + (parseInt(Qtysekarang) - parseInt(Qtybaru))
+
+        } else {
+            dataCart[idxeditcart].qty = Qtybaru
+            databuah[dataCart[idxeditcart].idxproduct].stock = 
+            parseInt(databuah[dataCart[idxeditcart].idxproduct].stock) - (parseInt(Qtybaru) - parseInt(Qtysekarang))
+        }
+    } else {
+        alert(`Produk ${dataCart[idxeditcart].name} sudah habis`)
+    }
+    renderdataC()
+    renderdataP()
+    bayar()
+}
+
+function DeleteDataP(idx){
+    databuah.splice(idx,1);
+    renderdataP();
+}
+
+function DeleteDataC(idx){
+    databuah[dataCart[idx].idxproduct].stock += parseInt(dataCart[idx].qty)
+    dataCart.splice(idx,1);
+    renderdataC();
+    renderdataP();
+    bayar();
+}
+renderdataP()
+</script>
+</body>
+</html>

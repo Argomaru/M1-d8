@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>table occupation</title>
+    <style>
+      table,
+      th,
+      tr,
+      td {
+        border: 1px solid black;
+        text-align: center;
+      }
+      td {
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <!-- isi dari table head adalah No, Name, Occupation, Gender, Age -->
+      <thead>
+        <!-- table head = informasi bahwa ini adalah header sebuah table-->
+
+        <tr>
+          <th>No</th>
+          <th>Name</th>
+          <th>Occupation</th>
+          <th>Gender</th>
+          <th>Age</th>
+          <th colspan="2">Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <!-- 
+        <tr>
+          <td>
+            
+            1
+          </td>
+          <td>Jason</td>
+          <td>Software Developer</td>
+          <td>Pria</td>
+          <td>23</td>
+          <td>
+            <button onclick="DeleteData()">Delete</button>
+          </td>
+        </tr>
+    -->
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td></td>
+          <td><input type="text" id="tbNama" /></td>
+          <td>
+            <select id="tbOcc">
+              <option value="EKEKEKEKEK">ekek</option>
+              <option value="HAHAHAHHA">haha</option>
+              <option value="HOHOHOHO">hoho</option>
+            </select>
+          </td>
+          <td>
+            <input type="radio" id="tbGender1" name="tbGender" value="Male" />
+            <label for="male">Male</label>
+            <input type="radio" id="tbGender2" name="tbGender" value="Female" />
+            <label for="female">Female</label>
+          </td>
+          <td><input type="number" id="tbAge" /></td>
+          <td><button onclick="AddData()">Add</button></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <script>
+      function AddData() {
+        let name = document.getElementById("tbNama").value;
+        let occ = document.getElementById("tbOcc").value;
+        let gender = "";
+        if (document.getElementById("tbGender1").checked) {
+          gender = document.getElementById("tbGender1").value;
+        } else {
+          gender = document.getElementById("tbGender2").value;
+        }
+        let age = document.getElementById("tbAge").value;
+        let person = new Person(name, occ, gender, age);
+        dataorang.push(person);
+
+        renderdata();
+
+        // alert("Add Data Ini");
+      }
+
+      function DeleteData(idx) {
+        // alert("Delete Data Ini pada index ke " +idx);
+        dataorang.splice(idx, 1);
+        renderdata();
+      }
+      class Person {
+        constructor(name, occ, gender, age) {
+          this.name = name;
+          this.occ = occ;
+          this.gender = gender;
+          this.age = age;
+        }
+      }
+
+      const dataorang = [new Person("Jason", "asu", "Pria", 12)];
+
+      function renderdata(editidx) {
+        let htmlresult = "";
+        dataorang.forEach((item, idx) => {
+          if (editidx == idx) {
+            htmlresult += `
+              <tr>
+            <td><!-- td kosong ini buat number--></td>
+            <td><input type="text" id="editname" value="${item.name}"/></td>
+            <td>
+              <select id="editocc">
+                <option ${
+                  item.occ == "Ekek" ? "selected" : ""
+                }value="Ekek">ekek</option>
+                <option ${
+                  item.occ == "Haha" ? "selected" : ""
+                }value="Haha">haha</option>
+                <option ${
+                  item.occ == "Hoho" ? "selected" : ""
+                }value="Hoho">hoho</option>
+              </select>
+            </td>
+            <td>
+              <input ${
+                item.gender == "Male" ? "checked" : ""
+              } type="radio" id="editgendermale" name="editgender" value="Male" />
+              <label for="male">Male</label>
+              <input ${
+                item.gender == "Female" ? "checked" : ""
+              } type="radio" id="editgenderfemale" name="editgender" value="Female" />
+              <label for="female">Female</label>
+            </td>
+            <td>
+              <input type="number" id="editage" value="${item.age}" />
+            </td>
+            <td>
+              <button onclick="renderdata()">Cancel</button>
+            
+            <button onclick="saveData(${idx})">Confirm</button></td>
+          </tr>`;
+          } else {
+            htmlresult += `
+                <tr>
+        <td>${idx + 1}</td>
+        <td>${item.name}</td>
+        <td>${item.occ}</td>
+       <td>${item.gender} </td>
+      <td> ${item.age} </td>
+                        <td><button onclick="DeleteData(${idx})"> Delete</button>
+                        <button onclick="renderdata(${idx})"> Edit</button>
+                          </td>
+                        </tr>`;
+          }
+        });
+        document.getElementsByTagName("tbody")[0].innerHTML = htmlresult;
+      }
+      function saveData(idx) {
+        let name = document.getElementById("editname").value;
+        let occ = document.getElementById("editocc").value;
+        let age = document.getElementById("editage").value;
+
+        let gender;
+        let isCheckedMale = document.getElementById("editgendermale").checked;
+        let isCheckedFemale =
+          document.getElementById("editgenderfemale").checked;
+
+        if (isCheckedMale) {
+          gender = document.getElementById("editgendermale").value;
+        } else {
+          gender = document.getElementById("editgenderfemale").value;
+        }
+
+        dataorang[idx].name = name;
+        dataorang[idx].occ = occ;
+        dataorang[idx].age = age;
+        dataorang[idx].gender = gender;
+
+        renderdata();
+      }
+      renderdata(); //function mau dipanggil dimana aja bebas, soalnya function itu memanggil
+    </script>
+  </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p><h1>Mari Berhitung!</h1></p>
+    
+    <p><h2>Hasil: </h2>
+        
+   
+</p>
+    
+<label for ="name">
+    <b>First Value</b></label>
+    <input type = "number"
+    value="" id="number1"
+    required>
+<br>
+<br>
+
+<label for ="name">
+    <b>Second Value</b></label>
+    <input type = "number"
+    value="" id="number2"
+    required>
+<br>
+<br>
+
+
+</body>
+    <td> <button onclick="pertambahan()">+</button></td>
+    <td> <button onclick="pengurangan()">-</button></td>
+    <td> <button onclick="perkalian()">*</button></td>
+    <td> <button onclick="pembagian()">/</button></td>
+<script>
+    function pertambahan(){
+        var number1 = parseInt(document.getElementById('number1').value);
+        var number2 = parseInt(document.getElementById('number2').value);
+        
+        
+        var result = number1+number2 
+        var kuda = document.getElementsByTagName('h2')
+        kuda[0].innerHTML = "hasil:" + result    
+    }
+
+    function pengurangan(){
+        var number1 = parseInt(document.getElementById('number1').value);
+        var number2 = parseInt(document.getElementById('number2').value);
+        
+        
+        var result = number1-number2 
+        var kuda = document.getElementsByTagName('h2')
+        kuda[0].innerHTML = "hasil:" + result     
+    }
+
+    function perkalian(){
+        var number1 = parseInt(document.getElementById('number1').value);
+        var number2 = parseInt(document.getElementById('number2').value);
+        
+        
+        var result = number1*number2 
+        var kuda = document.getElementsByTagName('h2')
+        kuda[0].innerHTML = "hasil:" + result   
+    }
+
+        function pembagian(){
+        var number1 = parseInt(document.getElementById('number1').value);
+        var number2 = parseInt(document.getElementById('number2').value);
+        
+        
+        var result = number1/number2 
+        var kuda = document.getElementsByTagName('h2')
+        kuda[0].innerHTML = "hasil:" + result   
+
+        }
+
+
+</script>
+</html>
